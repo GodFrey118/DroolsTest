@@ -1,0 +1,26 @@
+//这个必须放在第一行，package的名字是随意的，不必必须对应物理地址，跟java中的不同
+package com.yc.test
+//导入规则文件需要使用到的外部文件，这里的import导入的不仅仅可以是一个类，也可以是这个类中的某一个可访问的静态方法
+import com.yc.test.Test.Message;
+
+rule "Hello world"
+	//条件部分，即LHS
+	when
+		//这句话标示了：当前workingMemory存在Message类型并且status的属性是 Message.HELLO的Fact对象
+        m : Message( status == Message.HELLO, myMessage : message )
+        
+    //结果部分，即RHS
+    then
+        System.out.println( myMessage );
+        m.setMessage( "Goodbye cruel world" );
+        m.setStatus( Message.GOODBYE );
+        update( m );
+end
+
+rule "GoodBye"
+    when
+        Message( status == Message.GOODBYE, myMessage : message )
+    then
+        System.out.println( myMessage );
+       	
+end
